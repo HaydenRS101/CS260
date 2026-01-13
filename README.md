@@ -21,8 +21,13 @@ Elevator Pitch:
 
 
 HTML - This will be used for the login page as well as the website structure in the following page
+
 CSS - This will include different colors and the ability to grab a block of plans and move it (this including that the block will be dragged with your cursor)
+
 React - Is needed for the website to react to the persons inputs, allows them to login so they have their own account, etc. 
+
 Web service - We would go with registering the users, saving color preferences, etc. 
+
 Database: Also stores the color options as well as the plans you saved so when you come back they are still there. 
+
 WebSocket: As you change your tasks it will change it on the page thing that shows all the other peoples tasks or goals from others. 
