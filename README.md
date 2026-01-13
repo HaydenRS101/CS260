@@ -10,4 +10,19 @@ Elevator Pitch:
     I get sick of planning my day on planners that require too much info. You have to put in dates, exact times, why, repeating, etc. It get's exhausting, and honestly I sometimes just want to put in that I plan on working on x for an hour at this time and follow that with another hour doing something else. I plan on creating a scheduling app that is super simple and easy to use, with an interface that allows you to easily scroll between days, have a task list on the side if you want, and that you can grab and move events as easily as left clicking rather then having to manually change every peice of info in a planning block. This would also include sharable goals to other users and would allow you to see other people's public goals.
 
 
+
+
+
 ![Alt text](IMG_2554.jpeg)
+
+
+
+
+
+
+HTML - This will be used for the login page as well as the website structure in the following page
+CSS - This will include different colors and the ability to grab a block of plans and move it (this including that the block will be dragged with your cursor)
+React - Is needed for the website to react to the persons inputs, allows them to login so they have their own account, etc. 
+Web service - We would go with registering the users, saving color preferences, etc. 
+Database: Also stores the color options as well as the plans you saved so when you come back they are still there. 
+WebSocket: As you change your tasks it will change it on the page thing that shows all the other peoples tasks or goals from others. 
