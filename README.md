@@ -35,7 +35,13 @@ WebSocket: As you change your tasks it will change it on the page thing that sho
 
 
 
-Added stuff during the HTML project portion! 
+Added stuff during the HTML project portion! **********
+
+Overall I would say I have put everything in except for the simon Html being deployed to my website. I didn't understand how to do that when I later deployed the website html that I made. So It isn't there. The other prerequisites I did. 
+
+I have the readme here, and my github repository listed on the website on each page
+
+I use the tags for html, have multiple pages, use images, use a login system, have tables for info, links between pages, link for API outsourced thing, and a websocket spot or placeholder. I also have the additional things listed below. 
 
 
 HTML - I have four html pages, the about page doesn't have much, but the other three are fleshed out. 
@@ -46,3 +52,4 @@ Login - Login form with username etc
 Data base - You have the data of goals and schedules in a database
 Websocket - Real time changing of goals on the shared board. 
 3rd Party service- the motivational quote is the api external thing.
+
