@@ -31,3 +31,18 @@ Web service - We would go with registering the users, saving color preferences, 
 Database: Also stores the color options as well as the plans you saved so when you come back they are still there. 
 
 WebSocket: As you change your tasks it will change it on the page thing that shows all the other peoples tasks or goals from others. 
+
+
+
+
+Added stuff during the HTML project portion! 
+
+
+HTML - I have four html pages, the about page doesn't have much, but the other three are fleshed out. 
+Links - I have a navigation thing that has links to all pages. 
+Texts - Textual content describing the app and its features*****
+Images - Added placeholder images for when I put actual ones there later. ****
+Login - Login form with username etc
+Data base - You have the data of goals and schedules in a database
+Websocket - Real time changing of goals on the shared board. 
+3rd Party service- the motivational quote is the api external thing.
