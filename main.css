@@ -1,1 +1,15 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-width: 375px;
+    backround-color: #1D1111;
+    color: white;
+    padding: 1em;
+}   
 
+header {
+    flex: 0 80px;
+    backround-color: #452728;
+    color: white;
+    padding: 1em;
+}
