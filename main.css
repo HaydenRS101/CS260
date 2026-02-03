@@ -144,3 +144,21 @@ footer {
     text-align: center;
     margin-top: auto;
 }
+
+footer a:hover {
+    color: #e76f51;
+    text-decoration: underline;
+}
+
+
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: center;
+    }
+}
