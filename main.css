@@ -161,4 +161,62 @@ footer a:hover {
         flex-direction: column;
         align-items: center;
     }
+
+    header nav a {
+        width: 80%;
+        margin: 0.5em 0;
+    }
+
+    main {
+        padding: 1em;
+    }
+
+    main h2 {
+        font-size: 1.5em;
+    }
+
+    section {
+        padding: 1em;
+
+    }
+
+    form {
+        width: 100%;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px){
+    header nav {
+        justify-content: space-around;
+    }
+
+    header nav a {
+        padding: 0.6em 1em;
+    }
+
+    main {
+        padding: 1.5em;
+    }
+}
+
+
+
+@media (min-width: 1200px) {
+    main {
+        max-width: 1400px;
+    }
+
+    section {
+        padding: 2em;
+    }
+}
+
+@media (max-height: 500px) {
+    header p {
+        display: none;
+    }
+
+    main h2 {
+        font-size: 1.3em;
+    }
 }
