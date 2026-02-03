@@ -134,3 +134,13 @@ img {
     color: #f4a261;
     font-weight: bold;
 }
+
+
+
+footer {
+    background-color: #452728;
+    color: white;
+    padding: 1.5em;
+    text-align: center;
+    margin-top: auto;
+}
