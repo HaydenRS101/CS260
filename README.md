@@ -53,3 +53,16 @@ Data base - You have the data of goals and schedules in a database
 Websocket - Real time changing of goals on the shared board. 
 3rd Party service- the motivational quote is the api external thing.
 
+
+
+
+
+CSS:
+
+-I could not for the life of me figure out how to deploy the simon thing to my website, so unfortunately I have not done that. But I have completed the other prerequisites. 
+-Made the website look good, I like the colors and think they look nice and the text bubble things that contain the elements look good in my opinion as well. 
+-I used flex as a CSS framework. 
+-I used CSS for all the visual components
+-I modified it so it would look good on other devices etc. 
+-I will have imported a font by the next commit
+-I used quite a few elements, including ID and pseudo. 
