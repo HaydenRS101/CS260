@@ -72,3 +72,17 @@ CSS:
 -I will have imported a font by the next commit
 
 -I used quite a few elements, including ID and pseudo. 
+
+
+
+
+React things I added/did:
+
+-I made my website a single page application instead of a multipage website. 
+-I bundled everything using Vite
+-I made a bunch of react components for all the html css, etc files.
+-I made the react router
+-I deployed the simon thing and did all of the above to the simon-css folder and it's contents. 
+-I commited with comments to my repository which is on my website. 
+
+-- I didn't realize I could commit until I was almost done with doing this for the simon-css portion, so I didnt commit too much for that***
