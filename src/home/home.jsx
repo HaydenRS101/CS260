@@ -30,14 +30,22 @@ export function Home() {
   }, []); // The [] means to only run this once it loads**
 
 
-  
+  //every 3 seconds it adds a fake activity message to the feed. 
+  useEffect(() => {
+    let index = 1;
+    const interval = setInterval(() => {
+      if (index < mockActivityFeed.length) {
+        setActivityFeed(prev => [mockActivityFeed[index], ...prev]);
+        index++;
+      } else {
+        clearInterval(interval); //stops once all the mocks ahave been shown
+      }
+    }, 3000);
+    //closes once other stuff finished
+    return () => clearInterval(interval);
+  }, []);
+}//?
 
-
-
-
-  
-
-}
 
 
 
