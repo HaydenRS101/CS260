@@ -30,7 +30,6 @@ export function Home() {
     setQuote(q);
   }, []); // The [] means to only run this once it loads**
 
-
   //every 3 seconds it adds a fake activity message to the feed. 
   useEffect(() => {
     let index = 1;
@@ -39,47 +38,44 @@ export function Home() {
         setActivityFeed(prev => [mockActivityFeed[index], ...prev]);
         index++;
       } else {
-        clearInterval(interval); //stops once all the mocks ahave been shown
+        clearInterval(interval); //stops once all the mocks have been shown
       }
     }, 3000);
     //closes once other stuff finished
     return () => clearInterval(interval);
   }, []);
-}
 
-//this deals with people logging in
-function handleLogin(e) {
-  e.preventDefault(); //prevents the page from refreshing
-  if (username.trim() === '') return;
+  //this deals with people logging in
+  function handleLogin(e) {
+    e.preventDefault(); //prevents the page from refreshing
+    if (username.trim() === '') return;
 
-  //saves to the other pages/cites
-  localStorage.setItem('userName', username);
-  setLoggedInUser(username);
-  setIsLoggedIn(true);
-}
+    //saves to the other pages/cites
+    localStorage.setItem('userName', username);
+    setLoggedInUser(username);
+    setIsLoggedIn(true);
+  }
 
-function handleCreateAccount(e) {
-  e.preventDefault();
-  if (username.trim() === '') return; 
+  function handleCreateAccount(e) {
+    e.preventDefault();
+    if (username.trim() === '') return; 
 
-  localStorage.setItem('userName', username);
-  setLoggedInUser(username);
-  setIsLoggedIn(true);
-  alert(`Account created for ${username}! (This will be stored at a later point)`)
-}
+    localStorage.setItem('userName', username);
+    setLoggedInUser(username);
+    setIsLoggedIn(true);
+    alert(`Account created for ${username}! (This will be stored at a later point)`)
+  }
 
+  function handleLogout() {
+    localStorage.removeItem('userName');
+    setLoggedInUser('Guest');
+    setIsLoggedIn(false);
+    setUsername('');
+    setPassword('');
+  }
 
-function handleLogout() {
-  localStorage.removeItem('userName');
-  setLoggedInUser('Guest');
-  setIsLoggedIn(false);
-  setUsername('');
-  setPassword('');
-}
-
-
-
-export function Home() {
+  // this is the return, it's where all the HTML lives.
+  // everything above is logic, everything inside return() is what shows on screen.
   return (
     <main>
       <section>
@@ -96,27 +92,32 @@ export function Home() {
 
       <section>
         <h3>Login</h3>
-        <form> 
-          <label htmlFor="username">Username: </label>
-          <input type="text" id="username" name="username" placeholder="Enter username" required />
-          <br /><br />
-          <label htmlFor="password">Password: </label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required />
-          <br /><br />
-          <button type="submit">Login</button>
-          <button type="button">Create Account</button>
-        </form>
+        {/* show login form or welcome message depending on isLoggedIn */}
+        {isLoggedIn ? (
+          <div>
+            <p>Welcome back, <span id="user-name">{loggedInUser}</span>!</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        ) : (
+          <form onSubmit={handleLogin}> 
+            <label htmlFor="username">Username: </label>
+            <input type="text" id="username" name="username" placeholder="Enter username" required
+              value={username} onChange={(e) => setUsername(e.target.value)} />
+            <br /><br />
+            <label htmlFor="password">Password: </label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required
+              value={password} onChange={(e) => setPassword(e.target.value)} />
+            <br /><br />
+            <button type="submit">Login</button>
+            <button type="button" onClick={handleCreateAccount}>Create Account</button>
+          </form>
+        )}
       </section>
-
-      <section>
-        <p>Logged in as: <span id="user-name">Guest</span></p>
-      </section>
-      <br />
 
       <section>
         <h3>Quote of the day (to meet requirements for daily updating thing from the internet)</h3>
         <blockquote id="quote">
-          "I don't know what to put here yet" -Hayden Smith
+          "{quote.text}" -{quote.author}
         </blockquote>
         <p><em>Quote that will be provided by the external API cite thingy</em></p>
       </section>
@@ -126,7 +127,9 @@ export function Home() {
         <div id="realtime-updates">
           <p><strong>Live updates:</strong></p>
           <ul>
-            <li>Time stamps and names for people who completed goals example</li>
+            {activityFeed.map((activity, index) => (
+              <li key={index}>{activity}</li>
+            ))}
           </ul>
           <p><em>Real-time updates through the web connection thing</em></p>
         </div>
