@@ -46,6 +46,26 @@ export function Home() {
   }, []);
 }//?
 
+//this deals with people logging in
+function handleLogin(e) {
+  e.preventDefault(); //prevents the page from refreshing
+  if (username.trim() == '') return;
+
+  //saves to the other pages/cites
+  localStorage.setItem('userName', username);
+  setLoggedInUser(username);
+  setIsLoggedIn(true);
+}
+
+function handleCreateAccount(e) {
+  e.preventDefault();
+  if (username.trim() === '') return; 
+
+  localStorage.setItem('userName', username);
+  setLoggedInUser(username);
+  setIsLoggedIn(true);
+  alert(`Account created for ${username}! (This will be stored at a later point)`)
+}
 
 
 
