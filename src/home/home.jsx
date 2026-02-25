@@ -12,6 +12,20 @@ const mockActivityFeed [
 ];
 
 export function Home() {
+  //This tracks whether the person is currently typing in these areas
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  //This controls whether we show the login form or logged in veiw
+  const [LoggedInUser, setLoggedInUser] = useState( () => localStorage.getItem('userName') !== null)
+  //
+  
+
+}
+
+
+
+
+export function Home() {
   return (
     <main>
       <section>
