@@ -1,4 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+//this is the quote, I will replace this portion with a api thingy later
+function getMockQuote() {
+  return { text: "The light at the end of the tunnel can sometimes be a train.", author: "Me"};
+}
+
+//This will be where the websocket goes in a future week
+const mockActivityFeed [
+  "somebody completed goal: stand up", 
+  "Somebody different did a goal: sit down"
+];
 
 export function Home() {
   return (
