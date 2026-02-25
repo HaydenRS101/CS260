@@ -17,7 +17,24 @@ export function Home() {
   const [password, setPassword] = useState('');
   //This controls whether we show the login form or logged in veiw
   const [LoggedInUser, setLoggedInUser] = useState( () => localStorage.getItem('userName') !== null)
-  //
+  //this is the quotes state
+  const [quote, setQuote] = useState({ text: '', author: ''})
+  //This is the live updates at the bottom. 
+  const [activityFeed, setActivityFeed] = useState([mockActivityFeed[0]])
+  
+  //here is where we load the quote
+  useEffect(() => {
+    //API fetcher here later**
+    const q = getMockQuote();
+    setQuote(q);
+  }, []); // The [] means to only run this once it loads**
+
+
+  
+
+
+
+
   
 
 }
