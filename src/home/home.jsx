@@ -16,7 +16,8 @@ export function Home() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   //This controls whether we show the login form or logged in veiw
-  const [LoggedInUser, setLoggedInUser] = useState( () => localStorage.getItem('userName') !== null)
+  const [loggedInUser, setLoggedInUser] = useState(() => localStorage.getItem('userName') || 'Guest')
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('userName') !== null)
   //this is the quotes state
   const [quote, setQuote] = useState({ text: '', author: ''})
   //This is the live updates at the bottom. 
@@ -49,7 +50,7 @@ export function Home() {
 //this deals with people logging in
 function handleLogin(e) {
   e.preventDefault(); //prevents the page from refreshing
-  if (username.trim() == '') return;
+  if (username.trim() === '') return;
 
   //saves to the other pages/cites
   localStorage.setItem('userName', username);
