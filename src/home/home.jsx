@@ -6,7 +6,7 @@ function getMockQuote() {
 }
 
 //This will be where the websocket goes in a future week
-const mockActivityFeed [
+const mockActivityFeed = [
   "somebody completed goal: stand up", 
   "Somebody different did a goal: sit down"
 ];
@@ -44,7 +44,7 @@ export function Home() {
     //closes once other stuff finished
     return () => clearInterval(interval);
   }, []);
-}//?
+}
 
 //this deals with people logging in
 function handleLogin(e) {
@@ -67,6 +67,14 @@ function handleCreateAccount(e) {
   alert(`Account created for ${username}! (This will be stored at a later point)`)
 }
 
+
+function handleLogout() {
+  localStorage.removeItem('userName');
+  setLoggedInUser('Guest');
+  setIsLoggedIn(false);
+  setUsername('');
+  setPassword('');
+}
 
 
 
