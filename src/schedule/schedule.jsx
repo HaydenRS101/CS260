@@ -15,13 +15,32 @@ export function Schedule() {
   });
 
 
+  useEffect(() => {
+    localStorage.setItem('scheduleEvents', JSON.stringify(events));
+  }, [events]); // the events means it will refresh when a new event is edited or added. 
+
+  function handleAddEvent(e) {
+    e.preventDefault(); //stops the form from refreshing the page
+    if (eventName.trim() === '') return;
+
+    //creates a new event object
+    const newEvent = {
+      id: Date.now(), //gets an id thats unique
+      name: eventName,
+      date: eventDate || 'No date set',
+    };
+
+
+    //This adds, merges, and keeps all the events so we don't lose them. 
+    setEvents([...events, newEvent]);
+
+    //Clears the form inputs after adding
+    setEventName('');
+    setEventDate('');
+  }
 
 
 
-
-
-
-export function Schedule() {
   return (
     <main>
       <h2>My Schedule</h2>
