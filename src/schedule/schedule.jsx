@@ -51,12 +51,23 @@ export function Schedule() {
       <br />
       <section>
         <h3>Add Event</h3>
-        <form>
+        <form onSubmit={handleAddEvent}>
           <label htmlFor="event">Event:</label>
-          <input type="text" id="event" name="event" />
+          <input
+            type="text"
+            id="event"
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)}
+            required
+          />
           <br /><br />
           <label htmlFor="date">Date</label>
-          <input type="date" id="date" name="date" />
+          <input
+            type="date"
+            id="date"
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+          />
           <br /><br />
           <button type="submit">Add</button>
         </form>
@@ -64,11 +75,18 @@ export function Schedule() {
 
       <section>
         <h3>Your Events</h3>
-        <p>when events are made for the user they will be put here</p>
-        <ul>
-          <li>Meeting - date</li>
-          <li>Example 2</li>
-        </ul>
+        {events.length === 0 ? (
+          <p>No events yet, add one above!</p>
+        ) : (
+          <ul>
+            {events.map(event => (
+              <li key={event.id}>
+                <strong>{event.name}</strong> — {event.date}
+                <button onClick={() => handleDeleteEvent(event.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </main>
   );
