@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-// These are the fake "other users'" goals that will simulate incoming WebSocket messages
+//These are the fake goals from other users
 const mockIncomingGoals = [
   { user: 'Alex', goal: 'Finish a 30-day workout streak' },
   { user: 'Jordan', goal: 'Read one book per month' },
@@ -12,11 +12,43 @@ const mockIncomingGoals = [
 export function Goals() {
   const [newGoal, setNewGoal] = useState('');
 
-  // myGoals is the list of goals the logged-in user has posted
+  //myGoals is the list of goals the logged-in user has
   const [myGoals, setMyGoals] = useState(() => {
     const saved = localStorage.getItem('myGoals');
     return saved ? JSON.parse(saved) : [];
   });
+
+//communityGoals is the feed of everyone's goals
+  const [communityGoals, setCommunityGoals] = useState([
+    { user: 'Sam', goal: 'Run a 5K this spring' },
+    { user: 'Chris', goal: 'Journal every night before bed' },
+  ]);
+
+  //Saves the user's own goals to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('myGoals', JSON.stringify(myGoals));
+  }, [myGoals]);
+
+  //Simulates incoming goals from other users every 4 seconds (will put websocket here later)
+  useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < mockIncomingGoals.length) {
+        //Add the new mock goal to the top
+        setCommunityGoals(prev => [mockIncomingGoals[index], ...prev]);
+        index++;
+      } else {
+        clearInterval(interval); //stops after all fake goals are shown
+      }
+    }, 4000);
+
+    return () => clearInterval(interval); //cleanup
+  }, []);
+
+
+
+
+
 
 
   return (
