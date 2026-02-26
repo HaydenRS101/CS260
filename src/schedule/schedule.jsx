@@ -1,4 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+export function Schedule() {
+  //These two things track what the user is putting in the form
+  const [eventName, setEventName] = useState('');
+  const [eventDate, setEventDate] = useState('');
+
+  //This is a list of events. We put it in local storage so that it
+  // survives a page refresh. The function inside useState() only runs once when the cite loads
+  const [events, setEvents] = useState(() => {
+    const saved = localStorage.getItem('scheduleEvents');
+    //If theres saved data we parse and use it
+    //Otherwise start with an empty array.
+    return saved ? JSON.parse(saved) : [];
+  });
+
+
+
+
+
+
+
 
 export function Schedule() {
   return (
