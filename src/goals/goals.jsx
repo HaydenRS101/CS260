@@ -45,10 +45,30 @@ export function Goals() {
     return () => clearInterval(interval); //cleanup
   }, []);
 
+  function handleAddGoal(e) {
+    e.preventDefault();
+    if (newGoal.trim() === '') return;
 
+    const userName = localStorage.getItem('userName') || 'Guest';
 
+    const goalEntry = {
+      id: Date.now(),
+      user: userName,
+      goal: newGoal,
+    };
 
+    //Adds to your personal list
+    setMyGoals(prev => [...prev, goalEntry]);
 
+    //Also add to the community feed so others can see it
+    setCommunityGoals(prev => [goalEntry, ...prev]);
+
+    setNewGoal('');
+  }
+
+  function handleDeleteGoal(id) {
+    setMyGoals(prev => prev.filter(g => g.id !== id));
+  }
 
 
   return (
