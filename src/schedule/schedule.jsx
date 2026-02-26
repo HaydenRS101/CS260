@@ -39,6 +39,10 @@ export function Schedule() {
     setEventDate('');
   }
 
+  function handleDeleteEvent(id) {
+    //gets rid of the duplicates
+    setEvents(events.filter(event => event.id !== id));
+  }
 
 
   return (
