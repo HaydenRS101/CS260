@@ -86,3 +86,13 @@ React things I added/did:
 -I commited with comments to my repository which is on my website. 
 
 -- I didn't realize I could commit until I was almost done with doing this for the simon-css portion, so I didnt commit too much for that***
+
+
+
+2/26/2026
+-- Added multiple react components onto every page except about (there was nowhere to put it on that page)
+-- Put in things like being able to set goals, a place for other peoples goals to go
+-- Put in fake scripts that kind of mimic live feed for the time being
+-- For some reason I needed to fix the deployment stuff, which idk if that was in the insturctions but that was super difficult XD
+-- The goals should function and show below as well as login and creating an account
+-- they are all mocks but they should be functional!
