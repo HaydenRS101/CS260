@@ -18,7 +18,7 @@ export function Goals() {
     return saved ? JSON.parse(saved) : [];
   });
 
-//communityGoals is the feed of everyone's goals
+  //communityGoals is the feed of everyone's goals
   const [communityGoals, setCommunityGoals] = useState([
     { user: 'Sam', goal: 'Run a 5K this spring' },
     { user: 'Chris', goal: 'Journal every night before bed' },
@@ -70,23 +70,55 @@ export function Goals() {
     setMyGoals(prev => prev.filter(g => g.id !== id));
   }
 
-
   return (
     <main>
       <h2>Everybody's Goals</h2>
+
+      {/* Form to add a new goal */}
       <section>
-        <h3>Live Goals</h3>
-        <p>Goals for everybody</p>
-        <ul>
-          <li>Example Goal from somebody</li>
-        </ul>
+        <h3>Add a Goal</h3>
+        <form onSubmit={handleAddGoal}>
+          <label htmlFor="goal">Your Goal:</label>
+          <input
+            type="text"
+            id="goal"
+            value={newGoal}
+            onChange={(e) => setNewGoal(e.target.value)}
+            placeholder="Enter a goal..."
+            required
+          />
+          <br /><br />
+          <button type="submit">Add Goal</button>
+        </form>
       </section>
 
+      {/* The logged-in user's personal goals */}
       <section>
-        <h3>Live Updates</h3>
-        <p>Real-Time updates for goals</p>
+        <h3>My Goals</h3>
+        {myGoals.length === 0 ? (
+          <p>You haven't added any goals yet!</p>
+        ) : (
+          <ul>
+            {myGoals.map(g => (
+              <li key={g.id}>
+                <strong>{g.goal}</strong>
+                <button onClick={() => handleDeleteGoal(g.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Live community feed - this is where the mock websocket data shows up */}
+      <section>
+        <h3>Community Goals (Live Updates)</h3>
+        <p><em>Real-time updates through the web connection thing (websocket coming later)</em></p>
         <ul>
-          <li>Example live goal update</li>
+          {communityGoals.map((g, index) => (
+            <li key={index}>
+              <strong>{g.user}:</strong> {g.goal}
+            </li>
+          ))}
         </ul>
       </section>
     </main>
