@@ -1,6 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const bcrypt = require('bycryptjs');
+const bcrypt = require('bcryptjs');
 const uuid = require('uuid'); 
 
 const app = express();
@@ -80,7 +80,7 @@ app.post('/api/auth/create', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   const {username, password} = req.body;
 
-  const user = user[username];
+  const user = users[username];
 
   //if the user doesnt exist or the password is wrong send error message
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
@@ -158,7 +158,7 @@ app.post('/api/schedule', (req, res) => {
     scheduleEvents[username] = [];
   }
 
-  scheduleEvents[username].push[newEvent];
+  scheduleEvents[username].push(newEvent);
   res.json(newEvent);
 
 });
@@ -236,7 +236,7 @@ app.delete('/api/goals/:id', (req, res) => {
   }
 
   const index = communityGoals.indexOf(goal);
-  communityGoals.cplice(index, 1);
+  communityGoals.splice(index, 1);
 
   res.json({message: 'Deleted'});
 
