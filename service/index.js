@@ -98,8 +98,43 @@ app.post('/api/auth/login', async (req, res) => {
 
 
 //Delete or logout function 
-const token = uuid.v4();
-sessions[token] = username
+app.delete('/api/auth/logout', (req, res) => {
+  const token = req.cookies.token;
+
+  if (token) {
+    delete sessions[token];
+  }
+
+  //clears cookies from browser
+  res.clearCookie('token');
+  res.json({ message: 'Logged Out'})
+
+});
+
+
+//checks if currently logged in 
+app.get('/api/auth/me', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({error: 'Not Logged in'});
+  }
+  res.json({username});
+});
+
+
+
+//gets all events for the logged in person
+app.get('/api/schedule', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not Logged in'});
+  }
+  //returns the persons events
+  res.json(scheduleEvents[username] || []);
+});
+
+
+
 
 
 
