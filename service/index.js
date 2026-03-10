@@ -243,3 +243,25 @@ app.delete('/api/goals/:id', (req, res) => {
 });
 
 
+//Fetches the quote from the external API
+app.get('/api/quote', async (req, res) => {
+  try {
+    const response = await fetch('https://api.quotable.io/random');
+    const data = await response.json();
+    res.json({ text: data.content, author: data.author })
+  } catch {
+    res.json({
+      text: 'The light at the end of the tunnel can sometimes be a train.',
+      author: 'Unknown'
+    });
+  }
+});
+
+
+//this tells Node to listen to the stuff sent via port 4000
+
+app.listen(port, () => {
+  console.log('Backend service running on port ${port}');
+});
+
+
