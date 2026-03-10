@@ -164,6 +164,31 @@ app.post('/api/schedule', (req, res) => {
 });
 
 
+//Delete an event of somekind 
+app.delete('/api/schedule/:id', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+
+  const eventId = req.params.id;
+
+  scheduleEvents[username] = (scheduleEvents[username] || [])
+    .filter(e => e.id !== eventId);
+
+  res.json({message: 'Deleted'});
+
+});
+
+
+
+//below here is where all the community goal stuff will go
+
+
+//gets all community goals
+app.get('/api/goals', (req, res) => {
+  res.json(communityGoals);
+})
 
 
 
