@@ -10,9 +10,30 @@ export function Schedule() {
   //tracks if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
   useEffect(() => {
-    localStorage.setItem('scheduleEvents', JSON.stringify(events));
-  }, [events]); // the events means it will refresh when a new event is edited or added. 
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.username) {
+          setIsLoggedIn(true);
+          return fetch('/api/schedule');
+        }
+      })
+      .then(res => {
+        if (res) return res.json();
+      })
+      .then (data => {
+        if (data) setEvents(data);
+      })
+      .catch(() => {});
+  }, []);
+
+
+
+
+
+
 
   function handleAddEvent(e) {
     e.preventDefault(); //stops the form from refreshing the page
@@ -34,10 +55,17 @@ export function Schedule() {
     setEventDate('');
   }
 
-  function handleDeleteEvent(id) {
-    //gets rid of the duplicates
-    setEvents(events.filter(event => event.id !== id));
+  
+  async function handleDeleteEvent(id) {
+    const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE'});
+
+    if (res.ok) {
+      setEvents(events.filters(event => event.id !== id));
+    }
   }
+
+
+
 
 
    return (
