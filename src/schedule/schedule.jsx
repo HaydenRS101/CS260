@@ -5,15 +5,10 @@ export function Schedule() {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
 
-  //This is a list of events. We put it in local storage so that it
-  // survives a page refresh. The function inside useState() only runs once when the cite loads
-  const [events, setEvents] = useState(() => {
-    const saved = localStorage.getItem('scheduleEvents');
-    //If theres saved data we parse and use it
-    //Otherwise start with an empty array.
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  //events now come from the server instead of local storage
+  const [events, setEvents] = useState([]);
+  //tracks if user is logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('scheduleEvents', JSON.stringify(events));
@@ -45,10 +40,17 @@ export function Schedule() {
   }
 
 
-  return (
+   return (
     <main>
       <h2>My Schedule</h2>
       <br />
+
+      {!isLoggedIn && (
+        <p style={{ color: 'orange' }}>
+          Please log in on the Home page to save your schedule.
+        </p>
+      )}
+
       <section>
         <h3>Add Event</h3>
         <form onSubmit={handleAddEvent}>
