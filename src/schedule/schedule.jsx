@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 export function Schedule() {
-  //These two things track what the user is putting in the form
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
-
-  //events now come from the server instead of local storage
   const [events, setEvents] = useState([]);
-  //tracks if user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState('');
 
 
   useEffect(() => {
@@ -23,12 +20,11 @@ export function Schedule() {
       .then(res => {
         if (res) return res.json();
       })
-      .then (data => {
+      .then(data => {
         if (data) setEvents(data);
       })
       .catch(() => {});
   }, []);
-
 
 
   async function handleAddEvent(e) {
@@ -47,27 +43,21 @@ export function Schedule() {
       setEvents([...events, newEvent]);
       setEventName('');
       setEventDate('');
+    } else {
+      setError(newEvent.error);
     }
-   }
+  }
 
 
-
-  
-
-  
   async function handleDeleteEvent(id) {
-    const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE'});
+    const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE' });
 
     if (res.ok) {
       setEvents(events.filter(event => event.id !== id));
     }
   }
 
-
-
-
-
-   return (
+  return (
     <main>
       <h2>My Schedule</h2>
       <br />
@@ -77,6 +67,8 @@ export function Schedule() {
           Please log in on the Home page to save your schedule.
         </p>
       )}
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <section>
         <h3>Add Event</h3>
