@@ -76,3 +76,30 @@ app.post('/api/auth/create', async (req, res) => {
 
 });
 
+//This is for those who already have accounts
+app.post('/api/auth/login', async (req, res) => {
+  const {username, password} = req.body;
+
+  const user = user[username];
+
+  //if the user doesnt exist or the password is wrong send error message
+  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+    return res.status(401).json({ error: 'Username of Password is incorrect or invalid'});
+  }
+
+  //creates the token and saves it
+  const token = uuid.v4();
+  sessions[token] = username;
+
+  res.cookie('token', token, {httpOnly: true});
+  res.json({username}); 
+
+});
+
+
+//Delete or logout function 
+const token = uuid.v4();
+sessions[token] = username
+
+
+
