@@ -95,8 +95,6 @@ export function Home() {
     setPassword('');
   }
 
-}
-
 
   // this is the return, it's where all the HTML lives.
   // everything above is logic, everything inside return() is what shows on screen.
@@ -148,15 +146,7 @@ export function Home() {
 
       <section>
         <h3>Recent Activity</h3>
-        <div id="realtime-updates">
-          <p><strong>Live updates:</strong></p>
-          <ul>
-            {activityFeed.map((activity, index) => (
-              <li key={index}>{activity}</li>
-            ))}
-          </ul>
-          <p><em>Real-time updates through the web connection thing</em></p>
-        </div>
+        <p><em>Real-time updates coming via WebSocket in a future deliverable</em></p>
       </section>
     </main>
   );
