@@ -96,3 +96,13 @@ React things I added/did:
 -- For some reason I needed to fix the deployment stuff, which idk if that was in the insturctions but that was super difficult XD
 -- The goals should function and show below as well as login and creating an account
 -- they are all mocks but they should be functional!
+
+
+
+3/10/26 
+- Added a backend to the website finally! This means the data actually saves to a real server now instead of just the browser. So if you log in on one computer your stuff should actually be there.
+- Made it so you can actually create an account and log in for real now. Passwords get scrambled before saving so they aren't just sitting there as plain text which is good.
+- Schedule events and community goals are now stored on the server so they actually persist and are shared between users like they are supposed to be.
+- Added the quote thing that pulls from an outside website and sends it to the frontend.
+- Had to go back and update the home, schedule, and goals pages to actually talk to the backend instead of just saving stuff to the browser like before.
+- Deployed the simon service thing and got my startup deployed as well. 
