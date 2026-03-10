@@ -31,36 +31,35 @@ export function Schedule() {
 
 
 
-
-
-
-
-  function handleAddEvent(e) {
-    e.preventDefault(); //stops the form from refreshing the page
+  async function handleAddEvent(e) {
+    e.preventDefault();
     if (eventName.trim() === '') return;
 
-    //creates a new event object
-    const newEvent = {
-      id: Date.now(), //gets an id thats unique
-      name: eventName,
-      date: eventDate || 'No date set',
-    };
+    const res = await fetch('/api/schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: eventName, date: eventDate }),
+    });
+
+    const newEvent = await res.json();
+
+    if (res.ok) {
+      setEvents([...events, newEvent]);
+      setEventName('');
+      setEventDate('');
+    }
+   }
 
 
-    //This adds, merges, and keeps all the events so we don't lose them. 
-    setEvents([...events, newEvent]);
 
-    //Clears the form inputs after adding
-    setEventName('');
-    setEventDate('');
-  }
+  
 
   
   async function handleDeleteEvent(id) {
     const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE'});
 
     if (res.ok) {
-      setEvents(events.filters(event => event.id !== id));
+      setEvents(events.filter(event => event.id !== id));
     }
   }
 
