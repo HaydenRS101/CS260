@@ -12,13 +12,53 @@ export function Home() {
   const [quote, setQuote] = useState({text: '', author: ''});
 
   const [error, setError] = useState('');
+
+
+  //API loading portion
+  useEffect(() => {
+    fetch('/api/quote')
+      .then(res => res.json())
+      .then(data => setQuote(data))
+      .catch(() => {
+        setQuote({
+          text: 'The light at the end of the tunnel can sometimes be a train.',
+          author: 'Unknown' 
+        });
+      });
+  }, []);
+
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    setError('');
+
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setLoggedInUser(data.username);
+      setIsLoggedIn(true);
+    }
+    else {
+      setError(data.error);
+    }
+  }
+
+
+
+
+
+  
+
 }
 
 
-//this is the quote, I will replace this portion with a api thingy later
-function getMockQuote() {
-  return { text: "The light at the end of the tunnel can sometimes be a train.", author: "Me"};
-}
+
 
 //This will be where the websocket goes in a future week
 const mockActivityFeed = [
@@ -26,24 +66,6 @@ const mockActivityFeed = [
   "Somebody different did a goal: sit down"
 ];
 
-export function Home() {
-  //This tracks whether the person is currently typing in these areas
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  //This controls whether we show the login form or logged in veiw
-  const [loggedInUser, setLoggedInUser] = useState(() => localStorage.getItem('userName') || 'Guest')
-  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem('userName') !== null)
-  //this is the quotes state
-  const [quote, setQuote] = useState({ text: '', author: ''})
-  //This is the live updates at the bottom. 
-  const [activityFeed, setActivityFeed] = useState([mockActivityFeed[0]])
-  
-  //here is where we load the quote
-  useEffect(() => {
-    //API fetcher here later**
-    const q = getMockQuote();
-    setQuote(q);
-  }, []); // The [] means to only run this once it loads**
 
   //every 3 seconds it adds a fake activity message to the feed. 
   useEffect(() => {
