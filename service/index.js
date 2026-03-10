@@ -134,6 +134,36 @@ app.get('/api/schedule', (req, res) => {
 });
 
 
+//add a new event 
+app.post('/api/schedule', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not Logged in'});
+  }
+
+  const { name, date } = req.body;
+  if (!name) {
+    return res.status(400).json({ error: 'Event name needed'});
+  }
+
+  //build the new event
+  const newEvent = {
+    id: uuid.v4(), 
+    name, 
+    date: date || 'No date set',
+  };
+
+  //if the person doesnt have an array associated with their events yet add one to their account
+  if (!scheduleEvents[username]) {
+    scheduleEvents[username] = [];
+  }
+
+  scheduleEvents[username].push[newEvent];
+  res.json(newEvent);
+
+});
+
+
 
 
 
