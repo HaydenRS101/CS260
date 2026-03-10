@@ -87,68 +87,16 @@ export function Home() {
     }
   }
 
-
-
-
-
-
-
-
-}
-
-
-
-
-//This will be where the websocket goes in a future week
-const mockActivityFeed = [
-  "somebody completed goal: stand up", 
-  "Somebody different did a goal: sit down"
-];
-
-
-  //every 3 seconds it adds a fake activity message to the feed. 
-  useEffect(() => {
-    let index = 1;
-    const interval = setInterval(() => {
-      if (index < mockActivityFeed.length) {
-        setActivityFeed(prev => [mockActivityFeed[index], ...prev]);
-        index++;
-      } else {
-        clearInterval(interval); //stops once all the mocks have been shown
-      }
-    }, 3000);
-    //closes once other stuff finished
-    return () => clearInterval(interval);
-  }, []);
-
-  //this deals with people logging in
-  function handleLogin(e) {
-    e.preventDefault(); //prevents the page from refreshing
-    if (username.trim() === '') return;
-
-    //saves to the other pages/cites
-    localStorage.setItem('userName', username);
-    setLoggedInUser(username);
-    setIsLoggedIn(true);
-  }
-
-  function handleCreateAccount(e) {
-    e.preventDefault();
-    if (username.trim() === '') return; 
-
-    localStorage.setItem('userName', username);
-    setLoggedInUser(username);
-    setIsLoggedIn(true);
-    alert(`Account created for ${username}! (This will be stored at a later point)`)
-  }
-
   async function handleLogout() {
-    await fetch ('/api/auth/logout', {method: 'DELETE'});
+    await fetch('/api/auth/logout', { method: 'DELETE' });
     setLoggedInUser(null);
     setIsLoggedIn(false);
     setUsername('');
     setPassword('');
   }
+
+}
+
 
   // this is the return, it's where all the HTML lives.
   // everything above is logic, everything inside return() is what shows on screen.
