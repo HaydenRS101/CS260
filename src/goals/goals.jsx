@@ -1,49 +1,44 @@
 import React, { useState, useEffect } from 'react';
 
-//These are the fake goals from other users
-const mockIncomingGoals = [
-  { user: 'Alex', goal: 'Finish a 30-day workout streak' },
-  { user: 'Jordan', goal: 'Read one book per month' },
-  { user: 'Taylor', goal: 'Wake up at 6am every day' },
-  { user: 'Riley', goal: 'Learn to cook 5 new meals' },
-  { user: 'Morgan', goal: 'Spend less time on my phone' },
-];
-
 export function Goals() {
+
   const [newGoal, setNewGoal] = useState('');
+  //comes from server not from localstorage
+  const [communityGoals, setCommunityGoals] = useState([]);
+  const [myGoals, setMyGoals] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [error, setError] = useState('');
 
-  //myGoals is the list of goals the logged-in user has
-  const [myGoals, setMyGoals] = useState(() => {
-    const saved = localStorage.getItem('myGoals');
-    return saved ? JSON.parse(saved) : [];
-  });
 
-  //communityGoals is the feed of everyone's goals
-  const [communityGoals, setCommunityGoals] = useState([
-    { user: 'Sam', goal: 'Run a 5K this spring' },
-    { user: 'Chris', goal: 'Journal every night before bed' },
-  ]);
-
-  //Saves the user's own goals to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('myGoals', JSON.stringify(myGoals));
-  }, [myGoals]);
+  
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.username) {
+          setCurrentUser(data.username);
+        }
+      })
+      .catch(() => {});
 
-  //Simulates incoming goals from other users every 4 seconds (will put websocket here later)
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < mockIncomingGoals.length) {
-        //Add the new mock goal to the top
-        setCommunityGoals(prev => [mockIncomingGoals[index], ...prev]);
-        index++;
-      } else {
-        clearInterval(interval); //stops after all fake goals are shown
-      }
-    }, 4000);
-
-    return () => clearInterval(interval); //cleanup
+    //loads all community goals from the server
+    fetch('/api/goals')
+      .then(res => res.json())
+      .then(data => {
+        setCommunityGoals(data);
+      })
+      .catch(() => {});
   }, []);
+
+
+  useEffect(() => {
+    if (currentUser) {
+      setMyGoals(communityGoals.filter(g => g.user === currentUser));
+    }
+  }, [communityGoals, currentUser]);
+
+
+
 
   function handleAddGoal(e) {
     e.preventDefault();
