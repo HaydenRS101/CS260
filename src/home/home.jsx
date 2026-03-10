@@ -14,6 +14,21 @@ export function Home() {
   const [error, setError] = useState('');
 
 
+  //ask if already logged in
+  useEffect(() => {
+    fetch('/api/auth/me')
+    .then(res => res.json())
+    .then(data => {
+      if (data.username) {
+        setLoggedInUser(data.username);
+        setIsLoggedIn(true);
+      }
+    })
+    .catch(() => {}); //ignore if not logged in
+  }, []);
+
+
+
   //API loading portion
   useEffect(() => {
     fetch('/api/quote')
@@ -50,10 +65,34 @@ export function Home() {
   }
 
 
+  //create an account
+  async function handleCreateAccount(e) {
+    e.preventDefault();
+    setError('');
+
+    const res = await fetch('/api/auth/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password}),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setLoggedInUser(data.username);
+      setIsLoggedIn(true);
+    }
+    else {
+      setError(data.error);
+    }
+  }
 
 
 
-  
+
+
+
+
 
 }
 
