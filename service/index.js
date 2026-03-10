@@ -261,7 +261,7 @@ app.get('/api/quote', async (req, res) => {
 //this tells Node to listen to the stuff sent via port 4000
 
 app.listen(port, () => {
-  console.log('Backend service running on port ${port}');
+  console.log(`Backend service running on port ${port}`);
 });
 
 
