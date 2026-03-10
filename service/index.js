@@ -191,5 +191,55 @@ app.get('/api/goals', (req, res) => {
 })
 
 
+//add a new goal (community)
+app.post('/api/goals', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not logged in' });
+  }
+
+const { goal } = req.body;
+if (!goal) {
+  return res.status(400).json({ error: 'Goal required'});
+}
+
+const newGoal = {
+  id: uuid.v4(),
+  user: username,
+  goal,
+};
+
+//adds to the front so newest shows first
+communityGoals.unshift(newGoal);
+res.json(newGoal);
+});
+
+
+//Deletes a goal
+app.delete('/api/goals/:id', (req, res) => {
+  const username = getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not logged in'})
+  }
+
+  const goalId = req.params.id;
+
+  //find the goal first so we can check ownership.
+  const goal = communityGoals.find(g => g.id === goalId);
+
+  if (!goal) {
+    return res.status(404).json({ error: 'Goal not found' });
+  }
+
+  if (goal.user !== username) {
+    return res.status(403).json({ error: 'This is not your goal to delete' });
+  }
+
+  const index = communityGoals.indexOf(goal);
+  communityGoals.cplice(index, 1);
+
+  res.json({message: 'Deleted'});
+
+});
 
 
