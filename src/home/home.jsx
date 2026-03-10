@@ -122,6 +122,8 @@ export function Home() {
           </div>
         ) : (
           <form onSubmit={handleLogin}> 
+            {/* shows error message if login fails */}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <label htmlFor="username">Username: </label>
             <input type="text" id="username" name="username" placeholder="Enter username" required
               value={username} onChange={(e) => setUsername(e.target.value)} />
