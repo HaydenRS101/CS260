@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
+export function Home() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  //now asks the server if youre logged in
+  const [loggedInUser, setLoggedInUser] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState('');
+
+  //now comes from the backend /api/quote area
+  const [quote, setQuote] = useState({text: '', author: ''});
+
+  const [error, setError] = useState('');
+}
+
+
 //this is the quote, I will replace this portion with a api thingy later
 function getMockQuote() {
   return { text: "The light at the end of the tunnel can sometimes be a train.", author: "Me"};
@@ -66,9 +81,9 @@ export function Home() {
     alert(`Account created for ${username}! (This will be stored at a later point)`)
   }
 
-  function handleLogout() {
-    localStorage.removeItem('userName');
-    setLoggedInUser('Guest');
+  async function handleLogout() {
+    await fetch ('/api/auth/logout', {method: 'DELETE'});
+    setLoggedInUser(null);
     setIsLoggedIn(false);
     setUsername('');
     setPassword('');
