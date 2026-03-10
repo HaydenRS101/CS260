@@ -59,7 +59,7 @@ app.post('/api/auth/create', async (req, res) => {
   }
 
   //part that actually encrypts the password.
-  const passwordHash = await bycrypt.hash(password, 10);
+  const passwordHash = await bcrypt.hash(password, 10);
 
   //saves the new user
   users[username] = {id: uuid.v4(), username, passwordHash };
