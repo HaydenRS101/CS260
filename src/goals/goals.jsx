@@ -61,76 +61,17 @@ export function Goals() {
     }
   }
 
-  function handleDeleteGoal(id) {
-    setMyGoals(prev => prev.filter(g => g.id !== id));
-  }
-
-  import React, { useState, useEffect } from 'react';
-
-export function Schedule() {
-  //These two things track what the user is putting in the form
-  const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState('');
-
-  //events now come from the server instead of local storage
-  const [events, setEvents] = useState([]);
-  //tracks if user is logged in
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
-  useEffect(() => {
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        if (data.username) {
-          setIsLoggedIn(true);
-          return fetch('/api/schedule');
-        }
-      })
-      .then(res => {
-        if (res) return res.json();
-      })
-      .then (data => {
-        if (data) setEvents(data);
-      })
-      .catch(() => {});
-  }, []);
-
-
-
-  async function handleAddEvent(e) {
-    e.preventDefault();
-    if (eventName.trim() === '') return;
-
-    const res = await fetch('/api/schedule', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: eventName, date: eventDate }),
-    });
-
-    const newEvent = await res.json();
+  async function handleDeleteGoal(id) {
+    const res = await fetch(`/api/goals/${id}`, { method: 'DELETE' });
 
     if (res.ok) {
-      setEvents([...events, newEvent]);
-      setEventName('');
-      setEventDate('');
-    }
-   }
-
-
-
-  
-
-  
-  async function handleDeleteEvent(id) {
-    const res = await fetch(`/api/schedule/${id}`, { method: 'DELETE'});
-
-    if (res.ok) {
-      setEvents(events.filters(event => event.id !== id));
+      // Remove it from community goals — myGoals updates automatically
+      // because of the useEffect above that watches communityGoals
+      setCommunityGoals(prev => prev.filter(g => g.id !== id));
     }
   }
-
-
 
 
 
@@ -186,5 +127,4 @@ export function Schedule() {
       </section>
     </main>
   );
-}
 }
