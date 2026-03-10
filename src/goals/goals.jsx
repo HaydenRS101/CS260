@@ -39,26 +39,26 @@ export function Goals() {
 
 
 
-
-  function handleAddGoal(e) {
+  async function handleAddGoal(e) {
     e.preventDefault();
+    setError('');
     if (newGoal.trim() === '') return;
 
-    const userName = localStorage.getItem('userName') || 'Guest';
+    const res = await fetch('/api/goals', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: newGoal }),
+    });
 
-    const goalEntry = {
-      id: Date.now(),
-      user: userName,
-      goal: newGoal,
-    };
+    const data = await res.json();
 
-    //Adds to your personal list
-    setMyGoals(prev => [...prev, goalEntry]);
-
-    //Also add to the community feed so others can see it
-    setCommunityGoals(prev => [goalEntry, ...prev]);
-
-    setNewGoal('');
+    if (res.ok) {
+      // Add to the front of community goals so newest shows first
+      setCommunityGoals(prev => [data, ...prev]);
+      setNewGoal('');
+    } else {
+      setError(data.error);
+    }
   }
 
   function handleDeleteGoal(id) {
