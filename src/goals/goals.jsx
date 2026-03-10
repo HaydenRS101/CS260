@@ -77,54 +77,61 @@ export function Goals() {
 
    return (
     <main>
-      <h2>My Schedule</h2>
-      <br />
+      <h2>Everybody's Goals</h2>
 
-      {!isLoggedIn && (
+      {!currentUser && (
         <p style={{ color: 'orange' }}>
-          Please log in on the Home page to save your schedule.
+          Please log in on the Home page to add goals.
         </p>
       )}
 
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       <section>
-        <h3>Add Event</h3>
-        <form onSubmit={handleAddEvent}>
-          <label htmlFor="event">Event:</label>
+        <h3>Add a Goal</h3>
+        <form onSubmit={handleAddGoal}>
+          <label htmlFor="goal">Your Goal:</label>
           <input
             type="text"
-            id="event"
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
+            id="goal"
+            value={newGoal}
+            onChange={(e) => setNewGoal(e.target.value)}
+            placeholder="Enter a goal..."
             required
           />
           <br /><br />
-          <label htmlFor="date">Date</label>
-          <input
-            type="date"
-            id="date"
-            value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
-          />
-          <br /><br />
-          <button type="submit">Add</button>
+          <button type="submit">Add Goal</button>
         </form>
       </section>
 
       <section>
-        <h3>Your Events</h3>
-        {events.length === 0 ? (
-          <p>No events yet, add one above!</p>
+        <h3>My Goals</h3>
+        {myGoals.length === 0 ? (
+          <p>You haven't added any goals yet!</p>
         ) : (
           <ul>
-            {events.map(event => (
-              <li key={event.id}>
-                <strong>{event.name}</strong> — {event.date}
-                <button onClick={() => handleDeleteEvent(event.id)}>Delete</button>
+            {myGoals.map(g => (
+              <li key={g.id}>
+                <strong>{g.goal}</strong>
+                <button onClick={() => handleDeleteGoal(g.id)}>Delete</button>
               </li>
             ))}
           </ul>
         )}
       </section>
+
+      <section>
+        <h3>Community Goals</h3>
+        <p><em>Real-time updates via WebSocket coming in a future deliverable</em></p>
+        <ul>
+          {communityGoals.map((g, index) => (
+            <li key={g.id || index}>
+              <strong>{g.user}:</strong> {g.goal}
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }
+
