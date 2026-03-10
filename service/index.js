@@ -44,5 +44,35 @@ function getLoggedInUser(req) {
 }
 
 
+//creates new account
+app.post('/api/auth/create', async (req, res) => {
+  const { username, password } = req.body;
 
+  //makes sure we have both username and password included
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and Password required'});
+  }
+
+  //checks if username is already taken
+  if (users[username]) {
+    return res.status(409).json({error: 'Sorry, that username is already taken'});
+  }
+
+  //part that actually encrypts the password.
+  const passwordHash = await bycrypt.hash(password, 10);
+
+  //saves the new user
+  users[username] = {id: uuid.v4(), username, passwordHash };
+
+  //creates the session token thing
+  const token = uuid.v4();
+  sessions[token] = username;
+
+  //sends the token back securely
+  res.cookie('token', token, {httpOnly: true});
+
+  //sends back the username so the frontend knows whos logged in
+  res.json({username});
+
+});
 
