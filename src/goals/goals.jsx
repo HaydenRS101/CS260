@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useWebSocket } from '../useWebSocket';
+
 
 export function Goals() {
 
@@ -8,6 +10,7 @@ export function Goals() {
   const [myGoals, setMyGoals] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [error, setError] = useState('');
+  const [liveNotice, setLiveNotice] = useState('');
 
 
 //websocket portion 
@@ -19,7 +22,8 @@ const handleWsMessage = useCallback((data) => {
       if (prev.find((g) => g.id === data.goal.id)) return prev;
       return [data.goal, ...prev];
     });
-    setLiveNotice('`${data.gaol.user} just added a goal!')
+
+    setLiveNotice(`${data.goal.user} just added a goal!`)
     setTimeout(() => setLiveNotice(''), 4000);
   }
     else if (data.type === 'goal_deleted') {
@@ -27,13 +31,9 @@ const handleWsMessage = useCallback((data) => {
       setLiveNotice('A goal was removed.');
       setTimeout(() => setLiveNotice(''), 4000);
     }
-})
+}, []);
 
 useWebSocket(handleWsMessage);
-
-
-
-
 
 
 
@@ -106,6 +106,12 @@ useWebSocket(handleWsMessage);
     <main>
       <h2>Everybody's Goals</h2>
 
+      {liveNotice && (
+        <p style={{ color: '#f4a261', fontWeight: 'bold', textAlign: 'center'}}>
+          {liveNotice}
+        </p>
+      )}
+
       {!currentUser && (
         <p style={{ color: 'orange' }}>
           Please log in on the Home page to add goals.
@@ -149,7 +155,6 @@ useWebSocket(handleWsMessage);
 
       <section>
         <h3>Community Goals</h3>
-        <p><em>Real-time updates via WebSocket coming in a future deliverable</em></p>
         <ul>
           {communityGoals.map((g, index) => (
             <li key={g.id || index}>

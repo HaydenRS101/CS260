@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useWebsocket } from '../usewebsocket';
+import { useWebSocket } from '../usewebsocket';
 
 
 export function Home() {
