@@ -75,3 +75,31 @@ async function getGoalById(id) {
 
 //Schedule functions
 
+async function getSchedule(username) {
+    return scheduleCollection.find ({ username }).toArray();
+}
+
+async function addEvent(event) {
+    await scheduleCollection.insertOne(event);
+}
+
+async function deleteEvent(id, username) {
+    await scheduleCollection.deleteOne({ id, username });
+}
+
+
+
+module.exports = {
+  getUser,
+  createUser,
+  createSession,
+  getSession,
+  deleteSession,
+  getGoals,
+  addGoal,
+  deleteGoal,
+  getGoalById,
+  getSchedule,
+  addEvent,
+  deleteEvent,
+};
