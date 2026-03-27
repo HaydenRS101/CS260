@@ -103,17 +103,6 @@ app.get('/api/schedule', async (req, res) => {
 
 
 
-//gets all events for the logged in person
-app.get('/api/schedule', (req, res) => {
-  const username = getLoggedInUser(req);
-  if (!username) {
-    return res.status(401).json({ error: 'Not Logged in'});
-  }
-  //returns the persons events
-  res.json(scheduleEvents[username] || []);
-});
-
-
 //add a new event 
 app.post('/api/schedule', async (req, res) => {
   const username = await getLoggedInUser(req);
@@ -182,7 +171,7 @@ const newGoal = {
 };
 
 //adds to the front so newest shows first
-communityGoals.unshift(newGoal);
+await DB.addGoal(newGoal);
 res.json(newGoal);
 });
 
