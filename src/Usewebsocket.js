@@ -44,7 +44,7 @@ export function useWebSocket(onMessage) {
             reconnectTimer.current = setTimeout(connect, 3000);
         };
 
-        ws.oneerror = (err) => {
+        ws.onerror = (err) => {
             console.error('Websocket error: ', err);
             ws.close();
         };
@@ -62,10 +62,10 @@ export function useWebSocket(onMessage) {
 
     const sendMessage = useCallback((data) => {
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            ws.Ref.current.send(JSON.stringify(data));
+            wsRef.current.send(JSON.stringify(data));
         }
     }, []);
 
     return sendMessage;
-
+    
 }
