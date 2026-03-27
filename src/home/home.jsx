@@ -14,6 +14,34 @@ export function Home() {
   const [error, setError] = useState('');
 
 
+  const [activityFeed, setActivityFeed] = useState([]);
+
+  const handleWsMessages = useCallback((data) => {
+    if (data.type === 'activity' || data.type === 'goal_added' || data.type === 'goal_deleted') {
+
+      let message = ''; 
+      if (data.type === 'activity') {
+        message = data.message;
+      }
+      else if (data.type === 'goal_added') {
+        message = `${data.goal.user} added a new goal: "${data.goal.goal}"`;
+      }
+      else if (data.type === 'goal_deleted') {
+        message = `A goal has been deleted from the community list.`; 
+      }
+
+    }
+
+  })
+
+
+
+
+
+
+
+
+
   //ask if already logged in
   useEffect(() => {
     fetch('/api/auth/me')
