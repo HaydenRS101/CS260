@@ -19,22 +19,6 @@ app.use(cookieParser());
 //when the files are public, serve them automatically
 app.use(express.static('public'));
 
-//stores user info. Bycrypt automatically encrypts the password. 
-const users = {};
-
-//this stores a persons token which we save and pull back up later so we know the info they have etc.
-const sessions = {};
-
-//maps the user to the events
-const scheduleEvents = {};
-
-//shared goals from other users in an array
-//includes examples
-// const communityGoals = [
-//   { id: uuid.v4(), user: 'Sam', goal: 'Run a 5K this spring' },
-//   { id: uuid.v4(), user: 'Jacob', goal: 'Journal every night before bed' }
-// ];
-
 
 
 //the following bit looks up who is logged in based on the cookie
@@ -63,20 +47,15 @@ app.post('/api/auth/create', async (req, res) => {
   //part that actually encrypts the password.
   const passwordHash = await bcrypt.hash(password, 10);
 
-  //saves the new user
-  users[username] = {id: uuid.v4(), username, passwordHash };
-
-  //creates the session token thing
+ await DB.createUser(username, passwordHash);
   const token = uuid.v4();
-  sessions[token] = username;
-
-  //sends the token back securely
-  res.cookie('token', token, {httpOnly: true});
-
-  //sends back the username so the frontend knows whos logged in
-  res.json({username});
-
+  await DB.createSession(token, username);
+ 
+  res.cookie('token', token, { httpOnly: true });
+  res.json({ username });
 });
+
+
 
 //This is for those who already have accounts
 app.post('/api/auth/login', async (req, res) => {
@@ -100,17 +79,15 @@ app.post('/api/auth/login', async (req, res) => {
 
 
 //Delete or logout function 
-app.delete('/api/auth/logout', (req, res) => {
+app.delete('/api/auth/logout', async (req, res) => {
   const token = req.cookies.token;
-
+ 
   if (token) {
     await DB.deleteSession(token);
   }
-
-  //clears cookies from browser
+ 
   res.clearCookie('token');
-  res.json({ message: 'Logged Out'})
-
+  res.json({ message: 'Logged Out' });
 });
 
 
@@ -180,14 +157,15 @@ app.delete('/api/schedule/:id', async (req, res) => {
 
 
 //gets all community goals
-app.get('/api/goals', (req, res) => {
-  res.json(communityGoals);
-})
+app.get('/api/goals', async (req, res) => {
+  const goals = await DB.getGoals();
+  res.json(goals);
+});
 
 
 //add a new goal (community)
-app.post('/api/goals', (req, res) => {
-  const username = getLoggedInUser(req);
+app.post('/api/goals', async (req, res) => {
+  const username = await getLoggedInUser(req);
   if (!username) {
     return res.status(401).json({ error: 'Not logged in' });
   }
@@ -210,30 +188,24 @@ res.json(newGoal);
 
 
 //Deletes a goal
-app.delete('/api/goals/:id', (req, res) => {
-  const username = getLoggedInUser(req);
+app.delete('/api/goals/:id', async (req, res) => {
+  const username = await getLoggedInUser(req);
   if (!username) {
-    return res.status(401).json({ error: 'Not logged in'})
+    return res.status(401).json({ error: 'Not logged in' });
   }
-
-  const goalId = req.params.id;
-
-  //find the goal first so we can check ownership.
-  const goal = communityGoals.find(g => g.id === goalId);
-
+ 
+  const goal = await DB.getGoalById(req.params.id);
+ 
   if (!goal) {
     return res.status(404).json({ error: 'Goal not found' });
   }
-
+ 
   if (goal.user !== username) {
     return res.status(403).json({ error: 'This is not your goal to delete' });
   }
-
-  const index = communityGoals.indexOf(goal);
-  communityGoals.splice(index, 1);
-
-  res.json({message: 'Deleted'});
-
+ 
+  await DB.deleteGoal(req.params.id);
+  res.json({ message: 'Deleted' });
 });
 
 
