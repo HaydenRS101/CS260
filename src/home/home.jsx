@@ -16,7 +16,7 @@ export function Home() {
 
   const [activityFeed, setActivityFeed] = useState([]);
 
-  const handleWsMessages = useCallback((data) => {
+  const handleWsMessage = useCallback((data) => {
     if (data.type === 'activity' || data.type === 'goal_added' || data.type === 'goal_deleted') {
 
       let message = ''; 
@@ -24,7 +24,7 @@ export function Home() {
         message = data.message;
       }
       else if (data.type === 'goal_added') {
-        message = `${data.goal.user} added a new goal: "${data.goal.goal}"`;
+        message = `${data.goal.user} add  ed a new goal: "${data.goal.goal}"`;
       }
       else if (data.type === 'goal_deleted') {
         message = `A goal has been deleted from the community list.`; 
@@ -38,11 +38,7 @@ export function Home() {
     }
   }, []);
 
-
-
-
-
-
+  useWebSocket(handleWsMessage);
 
 
 
