@@ -1,0 +1,33 @@
+const { WebSocketServer } = require('ws');
+
+
+//stores the websocket stuff
+const clients = new Set();
+
+
+function initWebsocket(server) {
+    const wss = new WebSocketServer({ server });
+
+    was.on('connection', (ws) => {
+        clients.add(ws);
+        console.log(`WebSocket client connected. Total: ${clients.size}`)
+
+        ws.send(JSON.stringify({
+            type: 'system',
+            message: "Connected to Schedule and Goals pages and their live updates.", 
+        }));
+
+        ws.on('message', (rawData) => {
+            //
+        })
+
+
+
+
+    })
+
+
+
+
+
+}
