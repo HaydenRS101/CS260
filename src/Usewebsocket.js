@@ -29,10 +29,43 @@ export function useWebSocket(onMessage) {
             }
         };
 
+        ws.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                onMessageRef.current(data);
+            }
+            catch (e) {
+                console.error('Failed to parse the Websocket message: ', e);
+            }
+        };
 
-        
+        ws.onclose = () =>  {
+            console.log('Websocket disconnected - reconnecting in 3 seconds');
+            reconnectTimer.current = setTimeout(connect, 3000);
+        };
+
+        ws.oneerror = (err) => {
+            console.error('Websocket error: ', err);
+            ws.close();
+        };
+
+    }, []);
 
 
-    })
+    useEffect(() => {
+        connect();
+        return () => {
+            if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+            if (wsRef.current) wsRef.current.close();
+        };
+    }, [connect]);
+
+    const sendMessage = useCallback((data) => {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            ws.Ref.current.send(JSON.stringify(data));
+        }
+    }, []);
+
+    return sendMessage;
 
 }
