@@ -2,12 +2,13 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid'); 
+const DB = require('./database')
+
 
 const app = express();
 
 //defaults the port to 4000
 const port = process.argv.length >2 ? process.argv[2] : 4000;
-
 
 
 //lets the reader read json files
@@ -29,18 +30,18 @@ const scheduleEvents = {};
 
 //shared goals from other users in an array
 //includes examples
-const communityGoals = [
-  { id: uuid.v4(), user: 'Sam', goal: 'Run a 5K this spring' },
-  { id: uuid.v4(), user: 'Jacob', goal: 'Journal every night before bed' }
-];
+// const communityGoals = [
+//   { id: uuid.v4(), user: 'Sam', goal: 'Run a 5K this spring' },
+//   { id: uuid.v4(), user: 'Jacob', goal: 'Journal every night before bed' }
+// ];
 
 
 
 //the following bit looks up who is logged in based on the cookie
-function getLoggedInUser(req) {
+async function getLoggedInUser(req) {
   const token = req.cookies.token;
   if (!token) return null;
-  return sessions[token] || null;
+  return await DB.getSession(token);
 }
 
 
@@ -54,8 +55,9 @@ app.post('/api/auth/create', async (req, res) => {
   }
 
   //checks if username is already taken
-  if (users[username]) {
-    return res.status(409).json({error: 'Sorry, that username is already taken'});
+  const existing = await DB.getUser(username);
+  if (existing) {
+    return res.status(409).json({ error: 'Sorry, that username is already taken' });
   }
 
   //part that actually encrypts the password.
@@ -80,7 +82,7 @@ app.post('/api/auth/create', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   const {username, password} = req.body;
 
-  const user = users[username];
+   const user = await DB.getUser(username);
 
   //if the user doesnt exist or the password is wrong send error message
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
@@ -89,7 +91,7 @@ app.post('/api/auth/login', async (req, res) => {
 
   //creates the token and saves it
   const token = uuid.v4();
-  sessions[token] = username;
+  await DB.createSession(token, username);
 
   res.cookie('token', token, {httpOnly: true});
   res.json({username}); 
@@ -102,7 +104,7 @@ app.delete('/api/auth/logout', (req, res) => {
   const token = req.cookies.token;
 
   if (token) {
-    delete sessions[token];
+    await DB.deleteSession(token);
   }
 
   //clears cookies from browser
@@ -113,12 +115,13 @@ app.delete('/api/auth/logout', (req, res) => {
 
 
 //checks if currently logged in 
-app.get('/api/auth/me', (req, res) => {
-  const username = getLoggedInUser(req);
+app.get('/api/schedule', async (req, res) => {
+  const username = await getLoggedInUser(req);
   if (!username) {
-    return res.status(401).json({error: 'Not Logged in'});
+    return res.status(401).json({ error: 'Not Logged in' });
   }
-  res.json({username});
+  const events = await DB.getSchedule(username);
+  res.json(events);
 });
 
 
@@ -135,49 +138,40 @@ app.get('/api/schedule', (req, res) => {
 
 
 //add a new event 
-app.post('/api/schedule', (req, res) => {
-  const username = getLoggedInUser(req);
+app.post('/api/schedule', async (req, res) => {
+  const username = await getLoggedInUser(req);
   if (!username) {
-    return res.status(401).json({ error: 'Not Logged in'});
+    return res.status(401).json({ error: 'Not Logged in' });
   }
-
+ 
   const { name, date } = req.body;
   if (!name) {
-    return res.status(400).json({ error: 'Event name needed'});
+    return res.status(400).json({ error: 'Event name needed' });
   }
-
-  //build the new event
+ 
   const newEvent = {
-    id: uuid.v4(), 
-    name, 
+    id: uuid.v4(),
+    username,
+    name,
     date: date || 'No date set',
   };
-
-  //if the person doesnt have an array associated with their events yet add one to their account
-  if (!scheduleEvents[username]) {
-    scheduleEvents[username] = [];
-  }
-
-  scheduleEvents[username].push(newEvent);
+ 
+  await DB.addEvent(newEvent);
   res.json(newEvent);
-
 });
 
 
+
+
 //Delete an event of somekind 
-app.delete('/api/schedule/:id', (req, res) => {
-  const username = getLoggedInUser(req);
+app.delete('/api/schedule/:id', async (req, res) => {
+  const username = await getLoggedInUser(req);
   if (!username) {
     return res.status(401).json({ error: 'Not logged in' });
   }
-
-  const eventId = req.params.id;
-
-  scheduleEvents[username] = (scheduleEvents[username] || [])
-    .filter(e => e.id !== eventId);
-
-  res.json({message: 'Deleted'});
-
+ 
+  await DB.deleteEvent(req.params.id, username);
+  res.json({ message: 'Deleted' });
 });
 
 
