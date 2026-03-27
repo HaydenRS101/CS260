@@ -10,6 +10,30 @@ export function Goals() {
   const [error, setError] = useState('');
 
 
+//websocket portion 
+const handleWsMessage = useCallback((data) => {
+
+  if (data.type === 'goal_added') {
+
+    setCommunityGoals((prev) => {
+      if (prev.find(g)) => g.id === data.goal.id)) return prev;
+      return [data.goal, ...prev];
+
+    })
+  }
+
+
+})
+
+
+useWebSocket(handleWsMessage);
+
+
+
+
+
+
+
   useEffect(() => {
   
     fetch('/api/auth/me')
