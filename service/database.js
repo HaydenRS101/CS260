@@ -38,3 +38,40 @@ async function createUser(username, passwordHash) {
 
 
 //session functions
+
+async function createSession(token, username) {
+    await sessionCollection.insertOne({ token, username });
+}
+
+async function getSession(token) {
+    const session = await sessionCollection.findOne({ token });
+    return session ? session.username : null;
+}
+
+async function deleteSession(token) {
+    await sessionCollection.deleteOne({ token });
+}
+
+
+//Goal Functions
+
+async function getGoals() {
+    return goalCollection.find().sort({ _id: -1 }).toArray();
+}
+
+async function addGoal(goal) {
+    await goalCollection.insertOne(goal);
+}
+
+async function deleteGoal(id) {
+    const { ObjectId } = require('mongodb');
+    await goalCollection.deleteOne({ id: id });
+}
+
+async function getGoalById(id) {
+    return goalCollection.findOne({ id });
+}
+
+
+//Schedule functions
+
