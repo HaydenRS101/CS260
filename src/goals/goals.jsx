@@ -16,15 +16,18 @@ const handleWsMessage = useCallback((data) => {
   if (data.type === 'goal_added') {
 
     setCommunityGoals((prev) => {
-      if (prev.find(g)) => g.id === data.goal.id)) return prev;
+      if (prev.find((g) => g.id === data.goal.id)) return prev;
       return [data.goal, ...prev];
-
-    })
+    });
+    setLiveNotice('`${data.gaol.user} just added a goal!')
+    setTimeout(() => setLiveNotice(''), 4000);
   }
-
-
+    else if (data.type === 'goal_deleted') {
+      setCommunityGoals((prev) => prev.filter((g) => g.id !== data.goal.id));
+      setLiveNotice('A goal was removed.');
+      setTimeout(() => setLiveNotice(''), 4000);
+    }
 })
-
 
 useWebSocket(handleWsMessage);
 
