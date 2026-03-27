@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useWebsocket } from '../usewebsocket';
+
 
 export function Home() {
   const [username, setUsername] = useState('');
@@ -19,19 +21,16 @@ export function Home() {
   const handleWsMessage = useCallback((data) => {
     if (data.type === 'activity' || data.type === 'goal_added' || data.type === 'goal_deleted') {
 
-      let message = ''; 
+      let message = '';
       if (data.type === 'activity') {
         message = data.message;
+      } else if (data.type === 'goal_added') {
+        message = `${data.goal.user} added a new goal: "${data.goal.goal}"`;
+      } else if (data.type === 'goal_deleted') {
+        message = `A goal has been deleted from the community list.`;
       }
-      else if (data.type === 'goal_added') {
-        message = `${data.goal.user} add  ed a new goal: "${data.goal.goal}"`;
-      }
-      else if (data.type === 'goal_deleted') {
-        message = `A goal has been deleted from the community list.`; 
-      }
-
       if (message) {
-        const entry = { id: Date.now(), text: message, time: new Date().toLocalTimeString()};
+        const entry = { id: Date.now(), text: message, time: new Date().toLocaleTimeString()};
 
         setActivityFeed((prev) => [entry, ...prev].slice(0, 10));
       }
@@ -175,8 +174,21 @@ export function Home() {
       </section>
 
       <section>
-        <h3>Recent Activity</h3>
-        <p><em>Real-time updates coming via WebSocket in a future deliverable</em></p>
+        <h3>Recent Activity{' '}
+          <span style={{ color: '#f4a261', fontSize: '0.8em' }}>● Live</span>
+        </h3>
+        {activityFeed.length === 0 ? (
+          <p><em>Waiting for live updates… add a goal to see this in action!</em></p>
+        ) : (
+          <ul>
+            {activityFeed.map((entry) => (
+              <li key={entry.id}>
+                <span style={{ color: '#f4a261', fontSize: '0.85em' }}>{entry.time}</span>
+                {' '} — {entry.text}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </main>
   );
