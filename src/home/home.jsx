@@ -30,9 +30,13 @@ export function Home() {
         message = `A goal has been deleted from the community list.`; 
       }
 
-    }
+      if (message) {
+        const entry = { id: Date.now(), text: message, time: new Date().toLocalTimeString()};
 
-  })
+        setActivityFeed((prev) => [entry, ...prev].slice(0, 10));
+      }
+    }
+  }, []);
 
 
 
