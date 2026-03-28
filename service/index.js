@@ -1,3 +1,4 @@
+const { initWebSocket, broadcastGoalEvent } = require('./websocket');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
@@ -181,6 +182,7 @@ const newGoal = {
 
 //adds to the front so newest shows first
 await DB.addGoal(newGoal);
+broadcastGoalEvent('goal_added', newGoal);
 res.json(newGoal);
 });
 
@@ -203,6 +205,7 @@ app.delete('/api/goals/:id', async (req, res) => {
   }
  
   await DB.deleteGoal(req.params.id);
+  broadcastGoalEvent('goal_deleted', { id: req.params.id });
   res.json({ message: 'Deleted' });
 });
 
@@ -224,8 +227,9 @@ app.get('/api/quote', async (req, res) => {
 
 //this tells Node to listen to the stuff sent via port 4000
 
-app.listen(port, () => {
-  console.log(`Backend service running on port ${port}`);
+const server = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
+initWebSocket(server);
 
 
