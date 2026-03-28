@@ -91,6 +91,15 @@ app.delete('/api/auth/logout', async (req, res) => {
 });
 
 
+//checks if currently logged in
+app.get('/api/auth/me', async (req, res) => {
+  const username = await getLoggedInUser(req);
+  if (!username) {
+    return res.status(401).json({ error: 'Not Logged in' });
+  }
+  res.json({ username });
+});
+
 //checks if currently logged in 
 app.get('/api/schedule', async (req, res) => {
   const username = await getLoggedInUser(req);
