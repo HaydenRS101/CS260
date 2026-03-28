@@ -5,10 +5,10 @@ const { WebSocketServer } = require('ws');
 const clients = new Set();
 
 
-function initWebsocket(server) {
+function initWebSocket(server) {
     const wss = new WebSocketServer({ server });
 
-    was.on('connection', (ws) => {
+    wss.on('connection', (ws) => {
         clients.add(ws);
         console.log(`WebSocket client connected. Total: ${clients.size}`)
 
@@ -59,4 +59,4 @@ function broadcastActivity(message) {
     broadcast({ type:'activity', message})
 }
 
-module.exports = { initWebsocket, broadcastGoalEvent, boradcastActivity};
+module.exports = { initWebSocket, broadcastGoalEvent, broadcastActivity};
