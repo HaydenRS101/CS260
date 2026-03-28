@@ -106,3 +106,23 @@ React things I added/did:
 - Added the quote thing that pulls from an outside website and sends it to the frontend.
 - Had to go back and update the home, schedule, and goals pages to actually talk to the backend instead of just saving stuff to the browser like before.
 - Deployed the simon service thing and got my startup deployed as well. 
+
+
+
+3/26/26
+- Connected the website to MongoDB Atlas so all the data actually saves to a real database now instead of just living in memory on the server. Before this, everything would wipe every time the server restarted which was a problem.
+- Users, passwords, sessions, goals, and schedule events all get saved to MongoDB now so they actually stick around.
+- Had to make a whole database.js file to handle all the MongoDB connection stuff and helper functions for getting and saving data.
+- The login and create account stuff now checks MongoDB to see if a username exists and saves new users there. Passwords are still getting scrambled with bcrypt before saving which is good.
+- Had to figure out MongoDB Atlas which was a whole thing. Had to set up network access to allow connections from anywhere (0.0.0.0/0) and get the connection string set up with the right credentials.
+- Deployed the simon-db thing and got everything working on the production server.
+
+3/27/26
+- Added WebSocket support so the community goals page updates in real time now without needing to refresh. If someone else adds or deletes a goal you can see it happen live which is pretty cool.
+- Made a websocket.js file on the backend that listens for connections and broadcasts messages to everyone connected whenever a goal gets added or deleted.
+- Made a useWebSocket.js custom hook on the frontend that handles connecting to the WebSocket server and auto reconnects if it drops.
+- The home page now has a live activity feed that shows recent goal activity from all users in real time.
+- The community goals page shows a little notification banner when someone adds or removes a goal.
+- Had to add the ws npm package to get WebSocket working on the backend.
+- Had to update vite.config.js to proxy WebSocket requests during development.
+- Deployed everything and got both simon and startup running on the production server.
